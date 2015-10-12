@@ -9,6 +9,8 @@ Backing up the database is only one part of migrating your WordPress site, you w
 
 _If_ you find anything erroneous in this guide or feel that anything should be clarified further, don't hesitate to either create a pull request or create an issue about it.
 
+_Note_: For the migration to work you need to make sure that your Jumpstarter WordPress site has at least the `19.1` version of the Jumpstarter plugin. If the version is lower, go ahead and update it.
+
 ## Manual Migration Procedure
 
 The manual procedure assumes that you've got SSH access to the host where you're currently hosting your WordPress site.
