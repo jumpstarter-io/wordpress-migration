@@ -1,25 +1,25 @@
 #!/bin/sh
 
 # =======================
-
+#
 # Original script by esperlu (https://github.com/esperlu) gist: https://gist.github.com/esperlu/943776
-# Additions by alx77 (https://github.com/alx77), BrorJudas (https://github.com/BrorJudas)
-
+# Additions by artemyk (https://github.com/artemyk), gkuenning (https://github.com/gkuenning),
+#              alx77 (https://github.com/alx77), BrorJudas (https://github.com/BrorJudas)
+#
+# This script converts a mysqldump to a sqlite3 compatible dump.
+#
+# Usage examples:
+#
+# Create an sqlite file from mysqldump:
+#     mysqldump --skip-extended-insert --compact -u<username> -p<password> <database> | ./mysql2sqlite.sh | sqlite3 mydb.sqlite
+# Create an sqlite file from file on disk:
+#     ./mysql2sqlite.sh <filename> | sqlite3 mydb.sqlite
 # =======================
 
-# Converts a mysqldump file into a Sqlite 3 compatible file. It also extracts the MySQL `KEY xxxxx` from the
-# CREATE block and create them in separate commands _after_ all the INSERTs.
+if [ "$#" -eq 1 ]; then
+    cat "$@";
+fi
 
-# Awk is chosen because it's fast and portable. You can use gawk, original awk or even the lightning fast mawk.
-# The mysqldump file is traversed only once.
-
-# Usage: $ ./mysql2sqlite mysqldump-opts db-name | sqlite3 database.sqlite
-# Example: $ ./mysql2sqlite --no-data -u root -pMySecretPassWord myDbase | sqlite3 database.sqlite
-
-# Thanks to and @artemyk and @gkuenning for their nice tweaks.
-
-#mysqldump --skip-extended-insert --compact  "$@" | \
-cat "$@" | \
 awk '
 
 BEGIN {
