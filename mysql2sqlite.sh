@@ -13,12 +13,8 @@
 # Create an sqlite file from mysqldump:
 #     mysqldump --skip-extended-insert --compact -u<username> -p<password> <database> | ./mysql2sqlite.sh | sqlite3 mydb.sqlite
 # Create an sqlite file from file on disk:
-#     ./mysql2sqlite.sh <filename> | sqlite3 mydb.sqlite
+#     cat <filename> | ./mysql2sqlite.sh | sqlite3 mydb.sqlite
 # =======================
-
-if [ "$#" -eq 1 ]; then
-    cat "$@";
-fi
 
 awk '
 
