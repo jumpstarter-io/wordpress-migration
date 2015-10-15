@@ -26,6 +26,9 @@ add_regx = re.compile("^(\s+)?add\s+(.*)(,|;)$", re.I)
 mod_regx = re.compile("^(\s+)?modify([^,]+).*(,|;)$", re.I)
 col_regx = re.compile("^(\s+)?(`|\"|')([^`\"']+)(`|\"|')", re.I)
 ins_regx = re.compile("^(\s+)?insert\s+into.*$", re.I)
+eins_regx = re.compile(".*\)(\s+)?;(\s+)?", re.I)
+eval_regx = re.compile(".*values(\s+)?;", re.I)
+com_regx = re.compile("^(\s+)?(#|/\*)", re.I)
 
 if __name__ == "__main__":
     fh = None
@@ -64,9 +67,31 @@ if __name__ == "__main__":
     in_alter_table = False
 
     cur_table_name = None
+
+    insert_buf = []
+    in_insert = False
     
     for line in fh:
         if len(line) == 0:
+            continue
+
+        if com_regx.match(line):
+            continue
+
+        if in_insert:
+            if eval_regx.match(line):
+                # Discard the insert statement if no values are given.
+                # example:
+                #  insert into tbl_name (`a`, `b`, `c`)
+                #  values;
+                in_insert = False
+                insert_buf = []
+                continue
+            insert_buf.append(line.lstrip(" \t").rstrip("\n\r"))
+            if eins_regx.match(line):
+                in_insert = False
+                odfh.write("\n" + " ".join(insert_buf))
+                insert_buf = []
             continue
 
         if in_table_def:
@@ -113,7 +138,13 @@ if __name__ == "__main__":
             continue
 
         if ins_regx.match(line):
-            odfh.write(line)
+            if eval_regx.match(line):
+                continue
+            if not eins_regx.match(line):
+                insert_buf.append(line.lstrip(" ").rstrip("\n\r"))
+                in_insert = True
+            else:
+                odfh.write(line)
             continue
 
     fh.close()
