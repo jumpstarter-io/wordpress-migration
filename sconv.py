@@ -7,6 +7,13 @@
 # Syntax to use when inserting data:
 #    include column names in every INSERT statement
 #      Example: INSERT INTO tbl_name (col_A,col_B,col_C) VALUES (1,2,3)
+#
+#
+# Usage examples:
+#   from mysql directly: mysqldump --skip-extended-insert --compact -u<db_user> -p<db_passwd> <db_name> | ./sconv.py -m | sqlite3 db.sqlite
+#   from mysql dump    : cat <dump_file> | ./sconv.py -m | sqlite3 db.sqlite
+#   from phpmyadmin dump: cat <dump_file> | ./sconv.py -p | ./sconv.py -m | sqlite3 db.sqlite
+#
 #####
 
 import sys
