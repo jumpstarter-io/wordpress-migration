@@ -103,7 +103,7 @@ foreach my $line (<STDIN>) {
     }
 
     # skip all other comments
-    if ($line =~ /^#/ || $line =~ /\/\*/) {
+    if ($line =~ /^#/ || $line =~ /^\/\*/) {
         next;
     }
 
@@ -155,7 +155,9 @@ foreach my $line (<STDIN>) {
     }
 
     if ($line =~ /^INSERT/ || $in_insert) {
-        $in_insert = 1;
+        if (!$in_insert) {
+            $in_insert = 1;
+        }
         $line =~ s/\n$//;
         $line =~ s/^\s+//;
         # skip empty inserts.
