@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/env perl
 
 ###
 # This is free and unencumbered software released into the public domain.
